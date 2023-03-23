@@ -9,6 +9,8 @@ import ro.itschool.demospringdata.repositories.StudentDetailsRepository;
 import ro.itschool.demospringdata.repositories.StudentRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -37,5 +39,21 @@ public class StudentService {
 
         return studentRepository.save(student);
 
+    }
+
+    public List<StudentEntity> getAllUnenrolledStudents(){
+//        Iterable<StudentEntity> allStudents = studentRepository.findAll();
+//
+//        List<StudentEntity> unenrolledStudents = new ArrayList<>();
+//
+//        for (StudentEntity student : allStudents){
+//            if (student.getCourses().isEmpty()){
+//                unenrolledStudents.add(student);
+//            }
+//        }
+//
+//        return unenrolledStudents;
+
+        return studentRepository.findByCoursesIsEmpty();
     }
 }

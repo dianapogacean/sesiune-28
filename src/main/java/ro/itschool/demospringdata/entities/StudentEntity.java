@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -34,9 +35,11 @@ import java.util.List;
 @NamedQueries(
         @NamedQuery(name = "byNameEmail", query = "select s from StudentEntity s where s.name=:name and s.email=:email")
 )
+@ToString
 public class StudentEntity {
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "students_courses",
             joinColumns = {@JoinColumn(name = "id_student")}, //owning side
@@ -44,6 +47,7 @@ public class StudentEntity {
     )
     private List<CourseEntity> courses = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.EAGER) //READD CASCADE ALL
     @JoinColumn(name = "id_details", referencedColumnName = "id")
     private StudentDetailsEntity studentDetailsEntity;
