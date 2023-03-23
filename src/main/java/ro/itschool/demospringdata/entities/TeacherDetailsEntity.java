@@ -40,4 +40,10 @@ public class TeacherDetailsEntity {
     @JoinColumn(name = "id")
     private TeachersEntity teacher;
 
+
+    private String college;
+
+
+    private String address;
+
 }

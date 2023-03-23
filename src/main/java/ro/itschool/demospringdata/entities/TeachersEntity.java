@@ -28,7 +28,7 @@ import java.util.List;
 public class TeachersEntity {
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CourseEntity> courses = new ArrayList<>();
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
