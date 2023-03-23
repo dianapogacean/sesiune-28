@@ -8,7 +8,7 @@ import ro.itschool.demospringdata.repositories.UserRepository;
 
 import java.util.List;
 
-@Component
+//@Component
 public class DerivedQueriesApp implements CommandLineRunner {
 
     @Autowired
