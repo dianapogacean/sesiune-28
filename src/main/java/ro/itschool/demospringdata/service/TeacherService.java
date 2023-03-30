@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.itschool.demospringdata.entities.TeacherDetailsEntity;
 import ro.itschool.demospringdata.entities.TeachersEntity;
+import ro.itschool.demospringdata.exceptions.InexistentResourceException;
 import ro.itschool.demospringdata.repositories.TeacherDetailsRepository;
 import ro.itschool.demospringdata.repositories.TeacherRepository;
+
+import java.util.Optional;
 
 @Service
 public class TeacherService {
@@ -39,6 +42,17 @@ public class TeacherService {
         savedTeacher.setTeacherDetails(teacherDetails);
 
         teacherRepository.save(savedTeacher);
+    }
+
+    public void delete(int id) throws InexistentResourceException {
+
+        Optional<TeachersEntity> foundTeacher =  this.teacherRepository.findById(id);
+
+        if (!foundTeacher.isPresent()){
+            throw new InexistentResourceException("This teacher doesn't exist", id);
+        } else {
+            teacherRepository.delete(foundTeacher.get());
+        }
     }
 
 }
