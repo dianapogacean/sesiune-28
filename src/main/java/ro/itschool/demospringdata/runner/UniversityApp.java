@@ -11,7 +11,7 @@ import ro.itschool.demospringdata.service.TeacherService;
 
 import java.util.List;
 
-@Component
+//@Component
 public class UniversityApp implements CommandLineRunner {
 
     @Autowired
