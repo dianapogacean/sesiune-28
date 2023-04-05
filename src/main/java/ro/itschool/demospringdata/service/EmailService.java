@@ -2,6 +2,7 @@ package ro.itschool.demospringdata.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -51,7 +52,11 @@ public class EmailService {
 
         mimeMessageHelper.addAttachment("tobereplaced", file);
 
-        this.javaMailSender.send(mimeMessage);
+        try {
+            javaMailSender.send(mimeMessage);
+        } catch (MailException e) {
+            e.printStackTrace();
+        }
 
     }
 
