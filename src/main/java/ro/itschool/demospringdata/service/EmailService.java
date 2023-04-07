@@ -10,6 +10,7 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 import java.io.File;
 
 @Component
@@ -37,7 +38,7 @@ public class EmailService {
 
     }
 
-    public void sendEmail(String to, String subject, String message, String pathToFile) throws MessagingException {
+    public void sendEmail(String to, String subject, String message, String csvReport) throws MessagingException {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
@@ -47,9 +48,9 @@ public class EmailService {
         mimeMessageHelper.setSubject(subject);
         mimeMessageHelper.setText(message);
 
-        FileSystemResource file = new FileSystemResource(new File(pathToFile));
-
-        mimeMessageHelper.addAttachment("tobereplaced", file);
+        byte[] csvReportBytes = csvReport.getBytes();
+        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(csvReportBytes, "text/csv");
+        mimeMessageHelper.addAttachment("report.csv", byteArrayDataSource);
 
         this.javaMailSender.send(mimeMessage);
 

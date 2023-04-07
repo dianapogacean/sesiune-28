@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class CourseStudentCount {
 
-    private String name;
-    private long count;
+    private String name; //name course
+    private long count; //number students enrolled in course
 }
