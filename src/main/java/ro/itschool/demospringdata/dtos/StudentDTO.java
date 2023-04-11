@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ro.itschool.demospringdata.entities.StudentEntity;
+import ro.itschool.demospringdata.validators.NoDigits;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -29,6 +30,7 @@ public class StudentDTO {
     private Integer id;
 
     @NotEmpty
+    @NoDigits(message = "Name cannot contain digits.")
     private String name;
 
     @Email
