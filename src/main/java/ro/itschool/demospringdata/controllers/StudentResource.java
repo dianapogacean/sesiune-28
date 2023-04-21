@@ -1,5 +1,9 @@
 package ro.itschool.demospringdata.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,7 +38,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/students")
 @Slf4j
 @Validated //here it has effect
 public class StudentResource {
@@ -61,6 +65,16 @@ public class StudentResource {
     }
 
     //DTO - Data Transfer Object
+
+    @Operation(summary = "Get student by id")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = @Content(schema = @Schema(implementation = StudentDTO.class)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "NOT FOUND",
+            content = @Content(schema = @Schema(implementation = Void.class)))
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getById(@Min(2) @PathVariable("id") Integer id) {
         Optional<StudentEntity> optionalStudentEntity = this.studentService.findById(id);

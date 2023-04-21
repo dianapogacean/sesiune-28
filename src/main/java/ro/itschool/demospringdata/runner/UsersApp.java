@@ -2,13 +2,10 @@ package ro.itschool.demospringdata.runner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-import ro.itschool.demospringdata.entities.User;
+import ro.itschool.demospringdata.entities.UserEntity;
 import ro.itschool.demospringdata.repositories.UserRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -21,16 +18,16 @@ public class UsersApp implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Optional<User> optionalUser = userRepository.findById(1);
+        Optional<UserEntity> optionalUser = userRepository.findById(1);
 
         if (optionalUser.isPresent()){
-           User dbUser = optionalUser.get();
+           UserEntity dbUser = optionalUser.get();
            dbUser.setLastName("NEW LAST NAME");
 
            userRepository.save(dbUser);
         }
 
-        User newUser = new User();
+        UserEntity newUser = new UserEntity();
         newUser.setLastName("my new user");
         newUser.setFirstName("first name user new");
         newUser.setAge(20);
@@ -40,7 +37,7 @@ public class UsersApp implements CommandLineRunner {
 
         //userRepository.deleteById(16);
 
-        Iterable<User> users = userRepository.findAll();
+        Iterable<UserEntity> users = userRepository.findAll();
 
         System.out.println(users);
     }

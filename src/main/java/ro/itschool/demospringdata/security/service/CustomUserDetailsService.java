@@ -1,0 +1,41 @@
+package ro.itschool.demospringdata.security.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ro.itschool.demospringdata.entities.UserEntity;
+import ro.itschool.demospringdata.repositories.UserRepository;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+   // @Transactional
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
+        //Set<RoleEntity> -> List<SimpleGranthedAuthority>
+
+        List<SimpleGrantedAuthority> authorityList = userEntity.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList());
+
+        return new User(userEntity.getEmail(), userEntity.getPassword(), authorityList);
+
+    }
+}
