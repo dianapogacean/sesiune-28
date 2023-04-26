@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,6 +51,7 @@ public class StudentResource {
     private EnrolmentService enrolmentService;
 
     @GetMapping   // GET /students
+    @PreAuthorize("hasRole('BASIC_USER')")
     public ResponseEntity<StudentListDTO> getAll() {
         Iterable<StudentEntity> dbStudents = this.studentService.findAll();
         List<StudentDTO> studentDTOList = new ArrayList<>();
@@ -76,19 +78,15 @@ public class StudentResource {
             description = "NOT FOUND",
             content = @Content(schema = @Schema(implementation = Void.class)))
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getById(@Min(2) @PathVariable("id") Integer id) {
-        Optional<StudentEntity> optionalStudentEntity = this.studentService.findById(id);
-        if (!optionalStudentEntity.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //404
-        }
+    public ResponseEntity<StudentDTO> getById(@Min(2) @PathVariable("id") Integer id) throws InexistentResourceException {
+        StudentEntity studentEntity = this.studentService.findById(id);
 
-        //student exists
-        StudentEntity studentEntity = optionalStudentEntity.get();
         StudentDTO studentDTO = StudentDTO.from(studentEntity);
         return new ResponseEntity<>(studentDTO, HttpStatus.OK); //200
     }
 
     @PostMapping //POST /students
+    @PreAuthorize("hasRole('BASIC_USER') or hasRole('ADMIN')")
     public ResponseEntity<StudentDTO> create(@Valid @RequestBody StudentDTO student) {
         StudentEntity studentEntity = this.studentService.add(student);
         return new ResponseEntity<>(StudentDTO.from(studentEntity), HttpStatus.CREATED);
@@ -144,6 +142,7 @@ public class StudentResource {
     }
 
     @GetMapping("/unenrolled")
+    @PreAuthorize("hasRole('BASIC_USER') or hasRole('ADMIN')")
     public ResponseEntity<StudentListDTO> getUnenrolledStudents() {
         List<StudentEntity> unenrolledEntities = this.studentService.getAllUnenrolledStudents();
         //TODO - refactor - add method that converts a list of entities in a list of dtos
@@ -174,9 +173,5 @@ public class StudentResource {
     }
 
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleConstrainViolation(ConstraintViolationException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+
 }

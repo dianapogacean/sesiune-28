@@ -11,12 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ro.itschool.demospringdata.security.service.CustomUserDetailsService;
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 public class BasicAuthSecurityConfig {
 
 
-    @Bean
+    //@Bean
     public CustomUserDetailsService userDetailsService(){
         return new CustomUserDetailsService();
     }
@@ -24,12 +24,12 @@ public class BasicAuthSecurityConfig {
     //@Autowired
     //private CustomUserDetailsService userDetailsService;
 
-    @Bean
+    //@Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
+   // @Bean
     public AuthenticationProvider authenticationProvider(CustomUserDetailsService customUserDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(customUserDetailsService) ; //verifica daca exista user-ul in DB
@@ -37,7 +37,7 @@ public class BasicAuthSecurityConfig {
         return daoAuthenticationProvider;
     }
 
-    @Bean
+    //@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //daca vrem sesiune sau nu
         //ce endpoint-uri vrem sa fie autentificate,

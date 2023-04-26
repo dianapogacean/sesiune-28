@@ -26,8 +26,8 @@ public class StudentService {
     @Autowired
     private StudentDetailsRepository studentDetailsRepository;
 
-    public Optional<StudentEntity> findById(int id) {
-        return this.studentRepository.findById(id);
+    public StudentEntity findById(int id) throws InexistentResourceException {
+        return this.studentRepository.findById(id).orElseThrow(() -> new InexistentResourceException("Student does not exist!", id));
     }
 
     public Iterable<StudentEntity> findAll() {

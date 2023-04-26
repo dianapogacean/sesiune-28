@@ -29,8 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 
-        //Set<RoleEntity> -> List<SimpleGranthedAuthority>
-
         List<SimpleGrantedAuthority> authorityList = userEntity.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
